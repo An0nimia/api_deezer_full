@@ -7,8 +7,9 @@ from datetime import (
 )
 
 from pydantic import (
-	BaseModel, Field,
-	BeforeValidator, ConfigDict
+	BaseModel, ValidationInfo,
+	BeforeValidator, ConfigDict,
+	Field, field_validator
 )
 
 from .artist import Artists
@@ -21,6 +22,8 @@ int_2_str = Annotated[
 	)
 ]
 
+
+DEFAULT_RELEASE_DATE = datetime(1, 1, 1)
 
 class Base_Track(BaseModel):
 	model_config = ConfigDict(populate_by_name = True) # https://docs.pydantic.dev/latest/api/config/#pydantic.config.ConfigDict.populate_by_name
@@ -83,3 +86,16 @@ class Track(Base_Track):
 		default = None,
 		validation_alias = 'FALLBACK'
 	)
+
+
+	@field_validator(
+		'digital_release_date',
+		'physical_release_date',
+		mode = 'before'
+	)
+	@classmethod
+	def check_alphanumeric(cls, date: date, info: ValidationInfo) -> date:
+		if date == '0000-00-00':
+			date = DEFAULT_RELEASE_DATE
+
+		return date
