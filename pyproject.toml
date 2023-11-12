@@ -1,0 +1,19 @@
+[tool.poetry]
+name = 'api-deezer-full'
+version = '0.0.1b0'
+description = "Wrapper for all 'hidden' deezer APIs"
+authors = ['An0nimia <an0nimia@protonmail.com>']
+license = 'CC BY 4.0'
+readme = 'README.md'
+
+
+[tool.poetry.dependencies]
+python = '>=3.12,<4.0'
+requests = "2.31.0"
+pydantic = "2.4.1"
+pyjwt = "2.8.0"
+
+
+[build-system]
+requires = ['poetry-core']
+build-backend = 'poetry.core.masonry.api'
