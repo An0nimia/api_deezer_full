@@ -23,7 +23,8 @@ int_2_str = Annotated[
 ]
 
 
-DEFAULT_RELEASE_DATE = datetime(1, 1, 1)
+DEFAULT_DATE = datetime(1, 1, 1)
+NO_DATE = '0000-00-00'
 
 class Base_Track(BaseModel):
 	model_config = ConfigDict(populate_by_name = True) # https://docs.pydantic.dev/latest/api/config/#pydantic.config.ConfigDict.populate_by_name
@@ -94,8 +95,8 @@ class Track(Base_Track):
 		mode = 'before'
 	)
 	@classmethod
-	def check_alphanumeric(cls, date: date, info: ValidationInfo) -> date:
-		if date == '0000-00-00':
-			date = DEFAULT_RELEASE_DATE
+	def check_dates(cls, date: date, info: ValidationInfo) -> date:
+		if date == NO_DATE:
+			date = DEFAULT_DATE
 
 		return date
