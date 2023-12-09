@@ -6,6 +6,8 @@ from pydantic import (
 	BaseModel, Field
 )
 
+from ...gw.types.track import DEFAULT_DATE
+
 from .cover import Cover
 from .media import Media
 from .lyrics import Lyrics
@@ -47,3 +49,12 @@ class Base_Track(BaseModel):
 	media: Media | None
 	is_favorite: bool | None = Field(validation_alias = 'isFavorite')
 	is_banned_from_recommendation: bool | None = Field(validation_alias = 'isBannedFromRecommendation')
+
+
+	@field_validator('release_date', mode = 'before')
+	@classmethod
+	def check_release_date(cls, release_date: str | None) -> str:
+		if not release_date is None:
+			return release_date
+
+		return DEFAULT_DATE
