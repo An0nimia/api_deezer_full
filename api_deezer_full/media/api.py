@@ -43,7 +43,7 @@ class API_Media:
 		media_formats: Media_Formats,
 		n_tracks: int,
 		medias: dict[str, Any]
-	) -> Medias:
+	) -> dict[str, Any]:
 
 		for a in range(0, n_tracks, cls.__DEFAULT_MAX_X_MEDIA):
 			medias += cls.__get_medias(

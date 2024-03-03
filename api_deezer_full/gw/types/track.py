@@ -81,9 +81,9 @@ class Track(Base_Track):
 	disk_number: int = Field(validation_alias = 'DISK_NUMBER')
 	id_genre: str = Field(validation_alias = 'GENRE_ID')
 	physical_release_date: date = Field(validation_alias = 'PHYSICAL_RELEASE_DATE')
-	status: bool = Field(validation_alias = 'STATUS')
+	status: int = Field(validation_alias = 'STATUS')
 
-	fallback: Track | None = Field( # pyright: ignore
+	fallback: Track | None = Field( # pyright: ignore [reportIncompatibleVariableOverride]
 		default = None,
 		validation_alias = 'FALLBACK'
 	)
