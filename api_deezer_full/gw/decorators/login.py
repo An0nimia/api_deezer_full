@@ -22,10 +22,9 @@ def check_login(
 ):
 	def inner(self: API_GW, *args: ...) -> dict[str, Any]:
 		if self.check_expire:
-			d_time = datetime.fromtimestamp(int(self.exp_license_token))
 			c_time = datetime.now()
 
-			if c_time >= d_time:
+			if c_time >= self.exp_license_token:
 				self.refresh()
 
 		return func(self, *args)

@@ -176,3 +176,4 @@ Cargo.lock
 *.pdb
 
 test_deezer_gw.py
+out.json

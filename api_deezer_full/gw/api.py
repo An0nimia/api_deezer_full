@@ -2,12 +2,15 @@ from typing import Any
 
 from requests import Session
 
+from datetime import datetime
+
 from json import dump as JSON_dump
 
 from .exceptions import Arl_Invalid
 
 from .types import (
-	Track, Album, User, Playlist
+	Track, Album, User,
+	Playlist, Search
 )
 
 from .decorators import (
@@ -93,7 +96,12 @@ class API_GW:
 
 		self.token: str = user_data_json['checkForm']
 		self.license_token: str = user_data_json['USER']['OPTIONS']['license_token']
-		self.exp_license_token: str = user_data_json['USER']['OPTIONS']['expiration_timestamp']
+
+		self.exp_license_token: datetime = datetime.fromtimestamp(
+			int(
+				user_data_json['USER']['OPTIONS']['expiration_timestamp']
+			)
+		)
 
 
 	def gw_get_track_lyric(self, id_track: int) -> dict[str, Any]:
@@ -189,9 +197,9 @@ class API_GW:
 
 
 	@check_link(method = 'deezer.pageAlbum', type_media = 'album')
-	def gw_get_page_album(
+	def gw_get_page_album_JSON(
 		self,
-		id_album: int,
+		id_album: str,
 		lang: str = 'en'
 	) -> dict[str, Any]:
 
@@ -224,3 +232,21 @@ class API_GW:
 		}
 
 		return params
+
+
+	def gw_search(
+		self,
+		query: str,
+		start: int = 0,
+		artist_suggest: bool = True,
+		nb: int = 25,
+		suggest: bool = True,
+		top_tracks: bool = True
+	) -> Search:
+
+		res = self.gw_search_JSON(
+			query, start, artist_suggest,
+			nb, suggest, top_tracks
+		)
+
+		return Search.model_validate(res['results'])
