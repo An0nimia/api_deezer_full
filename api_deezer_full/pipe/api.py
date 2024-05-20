@@ -1,17 +1,13 @@
+from jwt import decode #pyright: ignore [reportUnknownVariableType]
 from typing import Any
-
 from requests import Session
-
-from jwt import decode
 
 from ..gw import API_GW
 
-from .decorators import (
-	check_link, check_login
-)
-
 from .grapql import queries
 from .grapql.types import get_introspection
+
+from .decorators import check_login
 
 from .types import (
 	Track, Album,
@@ -64,7 +60,6 @@ class API_PIPE(API_GW):
 		self.write_log(res, 'introspection.json')
 
 
-	@check_link(type_media = 'track')
 	def pipe_get_track_JSON(self, id_track: str) -> dict[str, Any]:
 		'''
 
@@ -81,7 +76,6 @@ class API_PIPE(API_GW):
 		return Track.model_validate(res['data']['track'])
 
 
-	@check_link(type_media = 'album')
 	def pipe_get_album_JSON(self, id_album: str) -> dict[str, Any]:
 		'''
 
@@ -89,7 +83,9 @@ class API_PIPE(API_GW):
 
 		'''
 
-		return queries.get_album_query(id_album)
+		params = queries.get_album_query(id_album)
+
+		return self.pipe_make_req(params)
 
 
 	def pipe_get_album(self, link: str) -> Album:
@@ -98,7 +94,6 @@ class API_PIPE(API_GW):
 		return Album.model_validate(res['data']['album'])
 
 
-	@check_link(type_media = 'playlist')
 	def pipe_get_playlist_JSON(self, id_playlist: str) -> dict[str, Any]:
 		'''
 
@@ -106,7 +101,9 @@ class API_PIPE(API_GW):
 
 		'''
 
-		return queries.get_playlist_query(id_playlist)
+		params = queries.get_playlist_query(id_playlist)
+
+		return self.pipe_make_req(params)
 
 
 	def pipe_get_playlist(self, link: str) -> Playlist:
@@ -115,9 +112,10 @@ class API_PIPE(API_GW):
 		return Playlist.model_validate(res['data']['playlist'])
 
 
-	@check_link(type_media = 'track_lyric')
 	def pipe_get_track_lyric_JSON(self, id_track: str) -> dict[str, Any]:
-		return queries.get_track_lyric_query(id_track)
+		params = queries.get_track_lyric_query(id_track)
+
+		return self.pipe_make_req(params)
 
 
 	def pipe_get_track_lyric(self, id_track: str) -> Lyrics:
