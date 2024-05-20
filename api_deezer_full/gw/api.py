@@ -6,15 +6,13 @@ from datetime import datetime
 
 from json import dump as JSON_dump
 
+from .utils import check_errors
+from .decorators import check_login
 from .exceptions import Arl_Invalid
 
 from .types import (
 	Track, Album, User,
 	Playlist, Search
-)
-
-from .decorators import (
-	check_link, check_login
 )
 
 
@@ -68,12 +66,15 @@ class API_GW:
 			json = json_data
 		).json()
 
+		check_errors(params, json_data)
+
 		return resp
 
 
-	@check_link(method = 'deezer.getUserData')
 	def gw_get_user_data_JSON(self) -> dict[str, Any]:
-		...
+		method = 'deezer.getUserData'
+
+		return self.gw_make_req(method)
 
 
 	def gw_get_user_data(self) -> User:
@@ -104,7 +105,7 @@ class API_GW:
 		)
 
 
-	def gw_get_track_lyric(self, id_track: int) -> dict[str, Any]:
+	def gw_get_track_lyric(self, id_track: int | str) -> dict[str, Any]:
 		method = 'song.getLyrics'
 
 		params = {
@@ -114,22 +115,23 @@ class API_GW:
 		return self.gw_make_req(method, params)
 
 
-	@check_link(method = 'song.getData', type_media = 'track')
-	def gw_get_track_JSON(self, id_track: str) -> dict[str, Any]:
+	def gw_get_track_JSON(self, id_track: int | str) -> dict[str, Any]:
+		method = 'song.getData'
+
 		params = {
 			'SNG_ID': id_track
 		}
 
-		return params
+		return self.gw_make_req(method, params)
 
 
-	def gw_get_track(self, link: str) -> Track:
-		res = self.gw_get_track_JSON(link)
+	def gw_get_track(self, id_track: int | str) -> Track:
+		res = self.gw_get_track_JSON(id_track)
 
 		return Track.model_validate(res['results'])
 
 
-	def gw_get_tracks(self, id_tracks: list[int]) -> dict[str, Any]:
+	def gw_get_tracks(self, id_tracks: list[int | str]) -> dict[str, Any]:
 		method = 'song.getListData'
 
 		params = {
@@ -139,13 +141,14 @@ class API_GW:
 		return self.gw_make_req(method, params)
 
 
-	@check_link(method = 'song.getListByAlbum', type_media = 'album')
 	def gw_get_album_JSON(
 		self,
-		id_album: str,
+		id_album: int | str,
 		nb: int = -1,
 		start: int = 0
 	) -> dict[str, Any]:
+
+		method = 'song.getListByAlbum'
 
 		params = {
 			'alb_id': id_album,
@@ -153,12 +156,12 @@ class API_GW:
 			'start': start
 		}
 
-		return params
+		return self.gw_make_req(method, params)
 
 
 	def gw_get_album(
 		self,
-		id_album: str,
+		id_album: int | str,
 		nb: int = -1,
 		start: int = 0
 	) -> Album:
@@ -167,13 +170,14 @@ class API_GW:
 		return Album.model_validate(res['results'])
 
 
-	@check_link(method = 'playlist.getSongs', type_media = 'playlist')
 	def gw_get_playlist_JSON(
 		self,
-		id_playlist: str,
+		id_playlist: int | str,
 		nb: int = -1,
 		start: int = 0
 	) -> dict[str, Any]:
+
+		method = 'playlist.getSongs'
 
 		params = {
 			'playlist_id': id_playlist,
@@ -181,12 +185,12 @@ class API_GW:
 			'start': start
 		}
 
-		return params
+		return self.gw_make_req(method, params)
 
 
 	def gw_get_playlist(
 		self,
-		id_playlist: str,
+		id_playlist: int | str,
 		nb: int = -1,
 		start: int = 0
 	) -> Playlist:
@@ -196,22 +200,22 @@ class API_GW:
 		return Playlist.model_validate(res['results'])
 
 
-	@check_link(method = 'deezer.pageAlbum', type_media = 'album')
 	def gw_get_page_album_JSON(
 		self,
-		id_album: str,
+		id_album: int | str,
 		lang: str = 'en'
 	) -> dict[str, Any]:
+
+		method = 'deezer.pageAlbum'
 
 		params = {
 			'alb_id': id_album,
 			'lang': lang
 		}
 
-		return params
+		return self.gw_make_req(method, params)
 
 
-	@check_link(method = 'deezer.pageSearch')
 	def gw_search_JSON(
 		self,
 		query: str,
@@ -222,6 +226,8 @@ class API_GW:
 		top_tracks: bool = True
 	) -> dict[str, Any]:
 
+		method = 'deezer.pageSearch'
+
 		params = {
 			'query': query,
 			'start': start,
@@ -231,7 +237,7 @@ class API_GW:
 			'top_tracks': top_tracks
 		}
 
-		return params
+		return self.gw_make_req(method, params)
 
 
 	def gw_search(
