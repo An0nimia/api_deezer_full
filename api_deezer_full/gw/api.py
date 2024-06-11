@@ -25,8 +25,6 @@ class API_GW:
 
 	def __init__(self, arl: str) -> None:
 		self.__arl = arl
-		self._session = Session()
-		self._session.cookies['arl'] = self.__arl
 		self.refresh()
 
 
@@ -49,6 +47,7 @@ class API_GW:
 
 		match method:
 			case 'deezer.getUserData':
+				# trunk-ignore(bandit/B105)
 				api_token = 'null'
 			case _:
 				api_token = self.token
@@ -79,7 +78,6 @@ class API_GW:
 
 	def gw_get_user_data(self) -> User:
 		raise NotImplementedError('Sorry obj serialization at the moment sucks')
-		res = self.gw_get_user_data_JSON()
 
 
 	def refresh(self) -> None:
@@ -89,6 +87,8 @@ class API_GW:
 
 
 	def __set_tokens(self) -> None:
+		self._session = Session()
+		self._session.cookies['arl'] = self.__arl
 		user_data_json = self.gw_get_user_data_JSON()['results']
 		self.id_user = user_data_json['USER']['USER_ID']
 

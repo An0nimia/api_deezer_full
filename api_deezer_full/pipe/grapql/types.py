@@ -19,16 +19,17 @@ def get_media_right() -> str:
 		'''
 	)
 
+
 def get_media() -> str:
 	return (
-		f'''
+		'''
 			id
 			version
-			token {{
+			token {
 				payload
 				expiresAt
-			}}
-			estimatedSizes {{
+			}
+			estimatedSizes {
 				SBC_256
 				AAC_64
 				AAC_96
@@ -45,19 +46,19 @@ def get_media() -> str:
 				MP4_RA3
 				DD_JOC
 				AC4_IMS
-			}}
+			}
 		'''
 	)
 
 
 def get_album_fallback() -> str:
 	return (
-		f'''
+		'''
 			id
 			displayTitle
-			cover {{
-				url: urls(pictureRequest: {{width: 1400, height: 1400}})
-			}}
+			cover {
+				url: urls(pictureRequest: {width: 1400, height: 1400})
+			}
 			label
 			producerLine
 			copyright

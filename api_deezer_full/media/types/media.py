@@ -22,7 +22,7 @@ class _Media(BaseModel):
 def media_exist(media: dict[str, Any]) -> dict[str, Any] | None:
 	is_media = media.get('media')
 
-	if not is_media is None:
+	if is_media is not None:
 		is_media = is_media[0]
 
 	return is_media

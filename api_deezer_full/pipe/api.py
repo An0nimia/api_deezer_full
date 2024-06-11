@@ -22,11 +22,12 @@ class API_PIPE(API_GW):
 
 	def __init__(self, arl: str) -> None:
 		super().__init__(arl)
-		self.__session = Session()
 		self.refresh_jwt()
 
 
 	def refresh_jwt(self) -> None:
+		self.refresh()
+		self.__session = Session()
 		resp = self._session.post(self.__API_AUTH).json()
 
 		self.exp_jwt: int = decode(
@@ -60,71 +61,74 @@ class API_PIPE(API_GW):
 		self.write_log(res, 'introspection.json')
 
 
-	def pipe_get_track_JSON(self, id_track: str) -> dict[str, Any]:
-		'''
+	def pipe_get_track_JSON(self, id_track: int | str) -> dict[str, Any]:
+		"""
 
 		Function for getting Track's infos in JSON format
 
-		'''
+		"""
 
-		return queries.get_track_query(id_track)
+		params = queries.get_track_query(id_track)
+		self.write_log(params)
+
+		return self.pipe_make_req(params)
 
 
-	def pipe_get_track(self, link: str) -> Track:
-		res = self.pipe_get_track_JSON(link)
+	def pipe_get_track(self, id_track: int | str) -> Track:
+		res = self.pipe_get_track_JSON(id_track)
 
 		return Track.model_validate(res['data']['track'])
 
 
-	def pipe_get_album_JSON(self, id_album: str) -> dict[str, Any]:
-		'''
+	def pipe_get_album_JSON(self, id_album: int | str) -> dict[str, Any]:
+		"""
 
 		Function for getting Album's infos in JSON format
 
-		'''
+		"""
 
 		params = queries.get_album_query(id_album)
 
 		return self.pipe_make_req(params)
 
 
-	def pipe_get_album(self, link: str) -> Album:
-		res = self.pipe_get_album_JSON(link)
+	def pipe_get_album(self, id_album: int | str) -> Album:
+		res = self.pipe_get_album_JSON(id_album)
 
 		return Album.model_validate(res['data']['album'])
 
 
-	def pipe_get_playlist_JSON(self, id_playlist: str) -> dict[str, Any]:
-		'''
+	def pipe_get_playlist_JSON(self, id_playlist: int | str) -> dict[str, Any]:
+		"""
 
 		Function for getting Playlist's infos in JSON format
 
-		'''
+		"""
 
 		params = queries.get_playlist_query(id_playlist)
 
 		return self.pipe_make_req(params)
 
 
-	def pipe_get_playlist(self, link: str) -> Playlist:
-		res = self.pipe_get_playlist_JSON(link)
+	def pipe_get_playlist(self, id_playlist: int | str) -> Playlist:
+		res = self.pipe_get_playlist_JSON(id_playlist)
 		
 		return Playlist.model_validate(res['data']['playlist'])
 
 
-	def pipe_get_track_lyric_JSON(self, id_track: str) -> dict[str, Any]:
+	def pipe_get_track_lyric_JSON(self, id_track: int | str) -> dict[str, Any]:
 		params = queries.get_track_lyric_query(id_track)
 
 		return self.pipe_make_req(params)
 
 
-	def pipe_get_track_lyric(self, id_track: str) -> Lyrics:
+	def pipe_get_track_lyric(self, id_track: int | str) -> Lyrics:
 		res = self.pipe_get_track_lyric_JSON(id_track)
 
 		return Lyrics.model_validate(res['data']['track']['lyrics'])
 
 
-	def pipe_get_lyric_JSON(self, id_lyric: str) -> dict[str, Any]:
+	def pipe_get_lyric_JSON(self, id_lyric: int | str) -> dict[str, Any]:
 		params = queries.get_lyric_query(id_lyric)
 
 		return self.pipe_make_req(params)
@@ -138,7 +142,7 @@ class API_PIPE(API_GW):
 
 	def pipe_get_tracks(
 		self,
-		id_tracks: list[str],
+		id_tracks: list[int | str],
 		obj: bool = True
 	) -> list[Track] | dict[str, Any]:
 

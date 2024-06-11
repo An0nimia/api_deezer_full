@@ -6,7 +6,7 @@ from .types import (
 )
 
 
-def get_track_query(id_track: str) -> dict[str, Any]:
+def get_track_query(id_track: int | str) -> dict[str, Any]:
 	params = {
 		'operationName': 'get_track',
 		'variables': {
@@ -28,7 +28,7 @@ def get_track_query(id_track: str) -> dict[str, Any]:
 	return params
 
 
-def get_album_query(id_album: str) -> dict[str, Any]:
+def get_album_query(id_album: int | str) -> dict[str, Any]:
 	params = {
 		'operationName': 'get_album',
 		'variables': {
@@ -50,7 +50,7 @@ def get_album_query(id_album: str) -> dict[str, Any]:
 	return params
 
 
-def get_track_lyric_query(id_track: str) -> dict[str, Any]:
+def get_track_lyric_query(id_track: int | str) -> dict[str, Any]:
 	params = {
 		'operationName': 'get_track_lyric',
 		'variables': {
@@ -74,7 +74,7 @@ def get_track_lyric_query(id_track: str) -> dict[str, Any]:
 	return params
 
 
-def get_tracks_query(id_tracks: list[str]) -> dict[str, Any]:
+def get_tracks_query(id_tracks: list[int | str]) -> dict[str, Any]:
 	params = {
 		'operationName': 'get_tracks',
 		'variables': {
@@ -96,7 +96,7 @@ def get_tracks_query(id_tracks: list[str]) -> dict[str, Any]:
 	return params
 
 
-def get_playlist_query(id_playlist: str) -> dict[str, Any]:
+def get_playlist_query(id_playlist: int | str) -> dict[str, Any]:
 	params = {
 		'operationName': 'get_playlist',
 		'variables': {
@@ -118,7 +118,7 @@ def get_playlist_query(id_playlist: str) -> dict[str, Any]:
 	return params
 
 
-def get_lyric_query(id_lyric: str) -> dict[str, Any]:
+def get_lyric_query(id_lyric: int | str) -> dict[str, Any]:
 	params = {
 		'operationName': 'get_lyric',
 		'variables': {

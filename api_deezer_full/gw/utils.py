@@ -1,6 +1,6 @@
 from typing import Any
 
-from .exceptions.track_404 import Error_404
+from .exceptions import Error_404
 
 
 def check_errors(
@@ -31,4 +31,5 @@ def check_errors(
 				if 'The query exceeds' in is_error[0]['message']:
 					raise Exception('To add')
 				raise Exception(
-					f'Error type \'{is_type}\' error is unknown. Message \'{is_error[0]['message']}\'. Report this kindly :)')
+					f'Error type \'{is_type}\' error is unknown. Message \'{is_error[0]['message']}\'. Report this kindly :)'
+				)

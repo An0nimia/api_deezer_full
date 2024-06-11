@@ -53,8 +53,8 @@ class Base_Track(BaseModel):
 
 	@field_validator('release_date', mode = 'before')
 	@classmethod
-	def check_release_date(cls, release_date: str | None) -> str:
-		if not release_date is None:
+	def check_release_date(cls, release_date: str | None) -> str | datetime:
+		if release_date is not None:
 			return release_date
 
 		return DEFAULT_DATE
