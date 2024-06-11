@@ -17,6 +17,7 @@ class API_Mobile:
 	__API_URL = 'https://api.deezer.com/1.0/gateway.php'
 	__MOBILE_GW_KEY = 'VBK1FSUEXHTSDBJJ'
 	__MOBILE_API_KEY = '4VCYIJUCDLOUELGD1V8WBVYBNVDYOXEWSLLZDONGBBDFVXTZJRXPR29JRLQFO6ZE'
+	__TIMEOUT = 30
 
 
 	def __init__(self, mail: str, password: str) -> None:
@@ -33,7 +34,8 @@ class API_Mobile:
 		req = req_post(
 			self.__API_URL,
 			params = params,
-			json = json
+			json = json,
+			timeout = self.__TIMEOUT
 		).json()
 
 		return req

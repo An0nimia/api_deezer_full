@@ -8,6 +8,3 @@ __all__ = (
 	'API_GW', 'API_PIPE',
 	'API_Media', 'API_Mobile'
 )
-
-
-VERSION = '0.0.1'

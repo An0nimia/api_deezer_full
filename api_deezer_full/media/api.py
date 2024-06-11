@@ -11,6 +11,7 @@ from .exceptions import Insufficient_Rights
 class API_Media:
 	__API_MEDIA_URL = 'https://media.deezer.com/v1/get_url'
 	__DEFAULT_MAX_X_MEDIA = 250
+	__TIMEOUT = 30
 
 
 	@classmethod
@@ -29,7 +30,8 @@ class API_Media:
 
 		res: dict[str, Any] = req_post(
 			url = cls.__API_MEDIA_URL,
-			json = json_data
+			json = json_data,
+			timeout = cls.__TIMEOUT
 		).json()
 
 		return res
@@ -79,15 +81,14 @@ class API_Media:
 
 		errors = res.get('errors')
 
-		if not errors is None:
-			if errors[0]['code'] == 1002:
-				raise Insufficient_Rights(
-					msg = errors[0]['message'],
-					resp = res,
-					license_token = license_token
-				)
+		if errors is not None and errors[0]['code'] == 1002:
+			raise Insufficient_Rights(
+				msg = errors[0]['message'],
+				resp = res,
+				license_token = license_token
+			)
 
-		if saiyan and n_tracks > cls.__DEFAULT_MAX_X_MEDIA:
+		elif saiyan and n_tracks > cls.__DEFAULT_MAX_X_MEDIA:
 			cls.__get_medias_all(
 				license_token = license_token,
 				tracks_token = track_tokens[cls.__DEFAULT_MAX_X_MEDIA:],

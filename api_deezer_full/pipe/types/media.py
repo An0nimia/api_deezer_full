@@ -36,7 +36,6 @@ class Estimated_Sizes(BaseModel):
 			if size and size > 0:
 				media_formats.append(media_format)			
 
-		media_formats = ['MP3_128']
 		data['media_formats'] = media_formats
 
 		return data

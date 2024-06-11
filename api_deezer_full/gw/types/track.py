@@ -26,6 +26,7 @@ int_2_str = Annotated[
 DEFAULT_DATE = datetime(1, 1, 1)
 NO_DATE = '0000-00-00'
 
+
 class Base_Track(BaseModel):
 	model_config = ConfigDict(populate_by_name = True) # https://docs.pydantic.dev/latest/api/config/#pydantic.config.ConfigDict.populate_by_name
 
@@ -83,7 +84,7 @@ class Track(Base_Track):
 	physical_release_date: date = Field(validation_alias = 'PHYSICAL_RELEASE_DATE')
 	status: int = Field(validation_alias = 'STATUS')
 
-	fallback: Track | None = Field( # pyright: ignore [reportIncompatibleVariableOverride]
+	fallback: Track | None = Field( #pyright: ignore [reportIncompatibleVariableOverride]
 		default = None,
 		validation_alias = 'FALLBACK'
 	)

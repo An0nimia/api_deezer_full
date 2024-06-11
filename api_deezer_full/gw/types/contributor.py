@@ -11,13 +11,15 @@ class Contributor(BaseModel):
 	name: str
 
 
-def __create_contributors(data: dict[
-	str, list[str]
-]) -> list[Contributor]:
+def __create_contributors(
+	data: dict[
+		str, list[str]
+	] | list[Contributor] # when importing
+) -> list[Contributor]:
 
 	contributors: list[Contributor] = []
 
-	if data and type(data) is dict:
+	if data and isinstance(data, dict):
 		for role, names in data.items():
 			for name in names:
 				contributors.append(

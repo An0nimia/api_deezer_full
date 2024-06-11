@@ -10,6 +10,6 @@ class Error_404(Exception):
 
 		self.query = params
 		self.resp = resp
-		self.message = f'No Data found'
+		self.message = 'No Data found'
 
 		super().__init__(self.message)
