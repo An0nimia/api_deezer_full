@@ -22,12 +22,12 @@ class API_PIPE(API_GW):
 
 	def __init__(self, arl: str) -> None:
 		super().__init__(arl)
+		self.__session = Session()
 		self.refresh_jwt()
 
 
 	def refresh_jwt(self) -> None:
 		self.refresh()
-		self.__session = Session()
 		resp = self._session.post(self.__API_AUTH).json()
 
 		self.exp_jwt: int = decode(
@@ -69,7 +69,6 @@ class API_PIPE(API_GW):
 		"""
 
 		params = queries.get_track_query(id_track)
-		self.write_log(params)
 
 		return self.pipe_make_req(params)
 

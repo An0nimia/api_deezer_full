@@ -4,6 +4,8 @@ from requests import Session
 
 from datetime import datetime
 
+from logging import getLogger
+
 from json import dump as JSON_dump
 
 from .utils import check_errors
@@ -21,10 +23,12 @@ from .types import (
 
 class API_GW:
 	__API_URL = 'https://www.deezer.com/ajax/gw-light.php' #?method=deezer.getUserData&input=3&api_version=1.0&api_token=&cid=465385533
-
+	logger = getLogger('API_DEEZER_FULL_GW')
 
 	def __init__(self, arl: str) -> None:
 		self.__arl = arl
+		self._session = Session()
+		self._session.cookies['arl'] = self.__arl
 		self.refresh()
 
 
@@ -66,6 +70,7 @@ class API_GW:
 		).json()
 
 		check_errors(params, json_data)
+		self.logger.debug(resp)
 
 		return resp
 
@@ -87,8 +92,6 @@ class API_GW:
 
 
 	def __set_tokens(self) -> None:
-		self._session = Session()
-		self._session.cookies['arl'] = self.__arl
 		user_data_json = self.gw_get_user_data_JSON()['results']
 		self.id_user = user_data_json['USER']['USER_ID']
 
@@ -96,6 +99,7 @@ class API_GW:
 			raise Arl_Invalid(self.__arl)
 
 		self.token: str = user_data_json['checkForm']
+		self.exp_token = datetime.now()
 		self.license_token: str = user_data_json['USER']['OPTIONS']['license_token']
 
 		self.exp_license_token: datetime = datetime.fromtimestamp(
