@@ -14,7 +14,7 @@ from api_deezer_full.gw.types import (
 
 
 class GW_Test(TestCase):
-	__ARL = 'd1b59217b86abb231097b0fdd2b0e2e03304af8b9d25d9408c9c0cb9fb65a9536b131094fb65a27a5fb52658c518f865119bf6e7dc5a573ad0ac364feca3513c7b7dd332d59e2edc72b3711b306c39f5ac4cd8422ce33828009f50cf418af99b'
+	__ARL = 'af1bd8c14439541ed722aaee9b98f213632ca9a74ad93d379afe47711f7452dcbde84079d07bac961596e193e8aaae13e7b0f1c1ec9634c4e0b87f29e10e186acaef9ee7e4189f8ac93176648391313ea3ca60b1df07895fbfbe6f6bb963212e'
 	__api = API_GW(__ARL)
 	__api_pipe = API_PIPE(__ARL)
 	__TRACKS = ('2825782592', '374251471')
@@ -55,7 +55,7 @@ class GW_Test(TestCase):
 						formats = [
 							Format(
 								cipher = 'BF_CBC_STRIPE',
-								format = 'MP3_320'
+								format = 'MP3_128'
 							)
 						]
 					)

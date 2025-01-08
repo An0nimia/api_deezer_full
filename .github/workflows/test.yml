@@ -1,0 +1,45 @@
+name: Test package
+
+on:
+    push:
+    pull_request:
+
+permissions:
+    contents: read
+
+jobs:
+    trunk_check:
+        name: Trunk Code Quality Runner
+        runs-on: ubuntu-latest
+        permissions:
+            checks: write # For trunk to post annotations
+            contents: read # For repo checkout
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Trunk Code Quality
+              uses: trunk-io/trunk-action@v1
+
+    testcases:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                python-version: ["3.12", "3.13"]
+
+        steps:
+            - uses: actions/checkout@v4
+            - name: Set up Python ${{ matrix.python-version }}
+              uses: actions/setup-python@v5
+              with:
+                  python-version: ${{ matrix.python-version }}
+            # You can test your matrix by printing the current Python version
+            - name: Display Python version
+              run: python -c "import sys; print(sys.version)"
+            - name: Install pytest
+              run: |
+                  pip install pytest
+                  pip install .
+            - name: Run Tests
+              run: pytest
