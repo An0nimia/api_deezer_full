@@ -121,8 +121,11 @@ class API_PIPE(API_GW):
 		return self.pipe_make_req(params)
 
 
-	def pipe_get_track_lyric(self, id_track: int | str) -> Lyrics:
+	def pipe_get_track_lyric(self, id_track: int | str) -> Lyrics | None:
 		res = self.pipe_get_track_lyric_JSON(id_track)
+
+		if not res['data']['track']['lyrics']:
+			return
 
 		return Lyrics.model_validate(res['data']['track']['lyrics'])
 
