@@ -80,3 +80,13 @@ class GW_Test(TestCase):
 
 	def test_dump_introspection(self):
 		self.__api_pipe.dump_introspection()
+
+
+	def test_pipe_get_track_lyric(self):
+		id_tracks = ('2326670385', '157596012', '424438852')
+		results = (None, None, True)
+
+		for i, id_track in enumerate(id_tracks):
+			lyric = self.__api_pipe.pipe_get_track_lyric(id_track)
+
+			assert lyric == results[i] if results[i] is None else lyric is not None
