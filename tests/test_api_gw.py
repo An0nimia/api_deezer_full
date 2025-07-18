@@ -14,7 +14,7 @@ from api_deezer_full.gw.types import (
 
 
 class GW_Test(TestCase):
-	__ARL = 'af1bd8c14439541ed722aaee9b98f213632ca9a74ad93d379afe47711f7452dcbde84079d07bac961596e193e8aaae13e7b0f1c1ec9634c4e0b87f29e10e186acaef9ee7e4189f8ac93176648391313ea3ca60b1df07895fbfbe6f6bb963212e'
+	__ARL = 'cbd1d223c47a2229c9b6c44e139cce996b5785f9f9debd82b2fa8bfa6d8a7645ff2eb5562183ca891691ef03e14c38f3ef4e8a1663c86376db65f961c7b45e96084d7a30699a04096cd1ef9642b8bad890416f01136f4e0fdec401926bb9155e'
 	__api = API_GW(__ARL)
 	__api_pipe = API_PIPE(__ARL)
 	__TRACKS = ('2825782592', '374251471')
